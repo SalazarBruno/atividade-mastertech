@@ -1,5 +1,6 @@
 package br.com.brunomagnum.ponto;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,15 +76,14 @@ public class MainController {
 	}
 
 	@PostMapping(path="addTimeEntry") // Map ONLY POST Requests
-	public @ResponseBody String addTimeEntry(@RequestParam final String userId, @RequestParam final String type,
-      @RequestParam final String date) {
+	public @ResponseBody String addTimeEntry(@RequestParam final String userId, @RequestParam final String type) {
 		// @ResponseBody means the returned String is the response, not a view name
 		// @RequestParam means it is a parameter from the GET or POST request
 
 		TimeEntry te = new TimeEntry();
 	    te.setUserId(userId);
 		te.setType(type);
-		te.setDate(date);
+		te.setDate(LocalDateTime.now());
 		timeEntryRepository.save(te);
 		return "Saved";
 	}

@@ -1,5 +1,7 @@
 package br.com.brunomagnum.ponto;
 
+import java.time.LocalDateTime;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -42,7 +44,7 @@ public class TimeEntry {
     return date;
   }
 
-  public void setDate(String date) {
-    this.date = date;
+  public void setDate(LocalDateTime date) {
+      this.date = date.toString();
   }
 }
