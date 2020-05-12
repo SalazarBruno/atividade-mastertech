@@ -47,7 +47,12 @@ public class MainController {
 
 	@GetMapping("user/{id}")
 	public @ResponseBody Optional<User> findById(@PathVariable("id") Integer id) {
-		return userRepository.findById(id);
+    	if (userRepository.existsById(id)) {
+			return userRepository.findById(id);
+		} else {
+			throw new ResponseStatusException(
+				HttpStatus.NOT_FOUND, "Usuario não encontrado");
+		}		
 	}
 	
 	@PutMapping("editUser/{id}")
@@ -55,18 +60,23 @@ public class MainController {
 	@RequestParam(required = false) final String name,
 	@RequestParam(required = false) final String cpf,
 	@RequestParam(required = false) final String email) {
-		User u = userRepository.findById(id).get();
-		if (null != name) {
-			u.setName(name);
-		}
-		if (null != cpf) {
-			u.setCpf(cpf);
-		}
-		if (null != email) {
-			u.setEmail(email);
-		}
-		userRepository.save(u);
-		return "Updated";
+		if (userRepository.existsById(id)) {
+			User u = userRepository.findById(id).get();
+			if (null != name) {
+				u.setName(name);
+			}
+			if (null != cpf) {
+				u.setCpf(cpf);
+			}
+			if (null != email) {
+				u.setEmail(email);
+			}
+			userRepository.save(u);
+			return "Updated";
+		} else {
+			throw new ResponseStatusException(
+				HttpStatus.NOT_FOUND, "Usuario não encontrado");
+		}		
 	}
 
 //Entradas de ponto
@@ -78,7 +88,12 @@ public class MainController {
 
 	@GetMapping(path="listTimeEntries/{userId}")
 	public @ResponseBody Iterable<TimeEntry> findByUserId(@PathVariable("userId") String userId) {
-		return timeEntryRepository.findByUserId(userId);
+    	if (userRepository.existsById(Integer.parseInt(userId))) {
+			return timeEntryRepository.findByUserId(userId);
+		} else {
+			throw new ResponseStatusException(
+				HttpStatus.NOT_FOUND, "Usuario não encontrado");
+		}
 	}
 
 	@PostMapping(path="addTimeEntry") // Map ONLY POST Requests
