@@ -75,6 +75,11 @@ public class MainController {
 		return timeEntryRepository.findAll();
 	}
 
+	@GetMapping(path="listTimeEntries/{userId}")
+	public @ResponseBody Iterable<TimeEntry> findByUserId(@PathVariable("userId") String userId) {
+		return timeEntryRepository.findByUserId(userId);
+	}
+
 	@PostMapping(path="addTimeEntry") // Map ONLY POST Requests
 	public @ResponseBody String addTimeEntry(@RequestParam final String userId, @RequestParam final String type) {
 		// @ResponseBody means the returned String is the response, not a view name

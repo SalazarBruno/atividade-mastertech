@@ -8,5 +8,6 @@ import br.com.brunomagnum.ponto.TimeEntry;
 // CRUD refers Create, Read, Update, Delete
 
 public interface TimeEntryRepository extends CrudRepository<TimeEntry, Integer> {
+	public Iterable<TimeEntry> findByUserId(String userId);
 
 }
