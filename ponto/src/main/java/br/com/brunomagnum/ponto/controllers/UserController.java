@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @GetMapping()
-    public Iterable<User> findAll() {
+    public Iterable<User> findAll() throws Exception {
         try{
             return userService.findAll();
         } catch (RuntimeException exception) {

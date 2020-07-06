@@ -35,7 +35,7 @@ public class UserSeviceTest {
     }
 
     @Test
-    public void testfindAllUsers() {
+    public void testfindAllUsers() throws Exception {
 
         Mockito.when(userRepository.findAll()).thenReturn(Arrays.asList(user));
         Iterable<User> listOfUsers = userService.findAll();
@@ -43,5 +43,16 @@ public class UserSeviceTest {
         Assertions.assertEquals(listOfUsers,Arrays.asList(user));
     }
 
+/*
+    @Test
+    public void testfindAllUsersWhenNoUsers() {
 
+        Mockito.when(userRepository.findAll()).then(objUser -> {
+            throw new Exception();
+        });
+
+
+        Assertions.assertThrows(Exception.class,);
+    }
+*/
 }

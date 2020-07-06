@@ -22,8 +22,13 @@ public class UserService {
     return userRepository.save(user);
   }
 
-  public Iterable<User> findAll() {
-    return userRepository.findAll();
+  public Iterable<User> findAll() throws Exception {
+    try{
+      return userRepository.findAll();
+    }catch(Exception exception){
+      throw new Exception("Nenhum uuairo cadastrado");
+    }
+
   }
 
   public User findById(Integer id) throws Exception {
