@@ -14,6 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.brunomagnum.ponto.services.UserService;
 
+import javax.validation.Valid;
+
 @RestController()
 @RequestMapping("/usuario")
 public class UserController {
@@ -22,13 +24,22 @@ public class UserController {
     UserService userService;
   
     @PostMapping()
-    public User create(@RequestBody User user) {
-      return userService.create(user);
+    public User create(@RequestBody @Valid User user) {
+      try{
+          return userService.create(user);
+      } catch (RuntimeException exception) {
+          throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
+      }
     }
 
     @GetMapping()
     public Iterable<User> findAll() {
-      return userService.findAll();
+        try{
+            return userService.findAll();
+        } catch (RuntimeException exception) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
+        }
+
     }
   
     @GetMapping("/{id}")

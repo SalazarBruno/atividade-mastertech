@@ -1,20 +1,21 @@
 package br.com.brunomagnum.ponto.models;
 
-import java.util.Date;
+
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-
-import org.hibernate.validator.constraints.br.CPF;
-import org.springframework.data.annotation.Id;
+import java.time.LocalDate;
 
 @Entity
 public class User {
+
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
   
     @NotNull
@@ -28,7 +29,7 @@ public class User {
     @Email
     private String email;
     
-    private Date date;
+    private LocalDate date;
 
     public Integer getId() {
         return id;
@@ -62,11 +63,11 @@ public class User {
         this.email = email;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
   
