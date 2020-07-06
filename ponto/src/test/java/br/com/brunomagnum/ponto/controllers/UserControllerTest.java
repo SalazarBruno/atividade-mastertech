@@ -1,7 +1,10 @@
 package br.com.brunomagnum.ponto.controllers;
 
 import br.com.brunomagnum.ponto.models.User;
+import br.com.brunomagnum.ponto.repositories.UserRepository;
 import br.com.brunomagnum.ponto.services.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -34,6 +37,7 @@ public class UserControllerTest {
     @BeforeEach
     public void setUp(){
         user = new User();
+
         user.setName("blabla blabla surname");
         user.setEmail("blabla@brunomagnum.com.br");
         user.setCpf("31291504800");
@@ -66,6 +70,27 @@ public class UserControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get("/usuario"))
                 .andExpect(MockMvcResultMatchers.status().is(400));
     }
+
+    @Test
+    public void createUserTest() throws Exception {
+        Mockito.when(userService.create(Mockito.any(User.class))).then(objUser ->{
+            user.setId(1);
+            user.setDate(LocalDate.now());
+            return user;
+                });
+
+        ObjectMapper mapper = new ObjectMapper();
+        String userJson = mapper.writeValueAsString(user);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/usuario")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userJson))
+                .andExpect(MockMvcResultMatchers.status().isCreated())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.equalTo(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.date", CoreMatchers.equalTo((LocalDate.now().toString()))));
+    }
+
+
 
 }
 

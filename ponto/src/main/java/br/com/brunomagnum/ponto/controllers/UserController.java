@@ -3,6 +3,7 @@ package br.com.brunomagnum.ponto.controllers;
 import br.com.brunomagnum.ponto.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,9 +25,9 @@ public class UserController {
     UserService userService;
   
     @PostMapping()
-    public User create(@RequestBody @Valid User user) {
+    public ResponseEntity<User> create(@RequestBody @Valid User user) {
       try{
-          return userService.create(user);
+          return ResponseEntity.status(201).body(userService.create(user));
       } catch (RuntimeException exception) {
           throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
       }
