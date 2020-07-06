@@ -1,6 +1,7 @@
-package br.com.brunomagnum.ponto;
+package br.com.brunomagnum.Ponto;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,22 +16,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.brunomagnum.Ponto.models.TimeEntry;
+import br.com.brunomagnum.Ponto.models.User;
+import br.com.brunomagnum.Ponto.repositories.TimeEntryRepository;
+import br.com.brunomagnum.Ponto.repositories.UserRepository;
+
 @Controller // This means that this class is a Controller
-@RequestMapping(path = "/ponto") 
+@RequestMapping(path = "/ponto")
 public class MainController {
 	@Autowired
 	private UserRepository userRepository;
 	@Autowired
 	private TimeEntryRepository timeEntryRepository;
 
-	@PostMapping(path="/addUser") // Map ONLY POST Requests
-	public @ResponseBody String addNewUser (@RequestParam final String name, @RequestParam final String cpf,
-      @RequestParam final String email, @RequestParam final String date) {
+	@PostMapping(path = "/addUser") // Map ONLY POST Requests
+	public @ResponseBody String addNewUser(@RequestParam final String name, @RequestParam final String cpf,
+			@RequestParam final String email, @RequestParam final Date date) {
 		// @ResponseBody means the returned String is the response, not a view name
 		// @RequestParam means it is a parameter from the GET or POST request
 
 		User n = new User();
-	    n.setName(name);
+		n.setName(name);
 		n.setCpf(cpf);
 		n.setEmail(email);
 		n.setDate(date);
@@ -97,12 +103,12 @@ public class MainController {
 	}
 
 	@PostMapping(path="addTimeEntry") // Map ONLY POST Requests
-	public @ResponseBody String addTimeEntry(@RequestParam final String userId, @RequestParam final String type) {
+	public @ResponseBody String addTimeEntry(@RequestParam final String user, @RequestParam final String type) {
 		// @ResponseBody means the returned String is the response, not a view name
 		// @RequestParam means it is a parameter from the GET or POST request
 
 		TimeEntry te = new TimeEntry();
-		te.setUserId(userId);
+		te.setUser(user);
 		if (!type.matches("in|out")) {
 			throw new ResponseStatusException(
 				HttpStatus.BAD_REQUEST, "tipo de registro inválido, use in ou out");
