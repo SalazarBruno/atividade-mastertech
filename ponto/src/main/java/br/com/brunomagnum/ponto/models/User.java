@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Entity
@@ -18,15 +19,16 @@ public class User {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Integer id;
   
-    @NotNull
+    @NotNull(message="nome invalido")
+    @Size(min=5 , max=100, message="nome invalido")
     private String name;
     
-    @NotNull
-    @CPF
+    @NotNull(message = "cpf invalido")
+    @CPF(message = "cpf invalido")
     private String cpf;
     
-    @NotNull
-    @Email
+    @NotNull(message = "email inválido")
+    @Email(message = "email inválido")
     private String email;
     
     private LocalDate date;
