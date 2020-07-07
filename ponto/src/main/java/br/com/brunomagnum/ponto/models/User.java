@@ -33,7 +33,7 @@ public class User {
     
     private LocalDate date;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 

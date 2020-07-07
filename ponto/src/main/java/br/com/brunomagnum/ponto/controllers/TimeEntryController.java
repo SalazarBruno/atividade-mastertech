@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/ponto")
 public class TimeEntryController {
@@ -18,9 +20,9 @@ public class TimeEntryController {
     TimeEntryService timeEntryService;
 
     @PostMapping
-    public ResponseEntity<TimeEntry> register(@RequestBody int idUser) {
+    public ResponseEntity<TimeEntry> register(@RequestBody @Valid TimeEntry timeEntry) {
         try {
-            return ResponseEntity.status(201).body(timeEntryService.register(idUser));
+            return ResponseEntity.status(201).body(timeEntryService.register(timeEntry));
         } catch (Exception exception){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, exception.getMessage());
         }

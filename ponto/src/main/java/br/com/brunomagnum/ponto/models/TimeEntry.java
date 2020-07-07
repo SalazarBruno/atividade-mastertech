@@ -1,5 +1,7 @@
 package br.com.brunomagnum.ponto.models;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -12,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 import br.com.brunomagnum.ponto.enums.EntryType;
 
@@ -21,12 +24,17 @@ public class TimeEntry {
   @GeneratedValue(strategy=GenerationType.AUTO)
   private Integer id;
 
+  @NotNull
   @ManyToOne
   private User user;
 
+  @NotNull
   @Enumerated(EnumType.STRING)
   private EntryType entryType;
 
+  private LocalDateTime punch;
+
+  /*
   @Temporal(TemporalType.DATE)
   private Date date;
 
@@ -38,6 +46,7 @@ public class TimeEntry {
     date = new Date();
     time = new Date();
   }
+*/
 
   public TimeEntry() {
   }
@@ -67,19 +76,11 @@ public class TimeEntry {
     this.user = user;
   }
 
-  public Date getDate() {
-    return date;
+  public LocalDateTime getPunch() {
+    return punch;
   }
 
-  public void setDate(Date date) {
-    this.date = date;
-  }
-
-  public Date getTime() {
-    return time;
-  }
-
-  public void setTime(Date time) {
-    this.time = time;
+  public void setPunch(LocalDateTime punch) {
+    this.punch = punch;
   }
 }

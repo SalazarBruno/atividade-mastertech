@@ -1,5 +1,6 @@
 package br.com.brunomagnum.ponto.services;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -23,25 +24,14 @@ public class TimeEntryService {
     @Autowired
     UserRepository userRepository;
 
-    public TimeEntry register(int idUser) throws Exception {
-        Optional<User> user = userRepository.findById(idUser);
-        if (!user.isPresent()) {
-          throw new Exception("Usuário não encontrado");
-        }
+    public TimeEntry register(TimeEntry timeEntry) {
+        LocalDateTime punchTime = LocalDateTime.now();
 
-        TimeEntry timeEntry = new TimeEntry();
-        timeEntry.setUser(user.get());
+        timeEntry.setUser(timeEntry.getUser());
+        timeEntry.setPunch(punchTime);
+        timeEntry.setEntryType(timeEntry.getEntryType());
 
-        List<TimeEntry> entries = timeEntryRepository.findByDate(new Date());
-        if (entries.size() != 0 ) {
-            if (entries.get(entries.size()-1).getEntryType().equals(EntryType.ENTRADA)) {
-                timeEntry.setEntryType(EntryType.SAIDA);
-            } else {
-                timeEntry.setEntryType(EntryType.ENTRADA);
-            }
-        } else {
-            timeEntry.setEntryType(EntryType.ENTRADA);            
-        }
         return timeEntryRepository.save(timeEntry);
     }
+
 }
