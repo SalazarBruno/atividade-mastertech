@@ -90,8 +90,34 @@ public class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.date", CoreMatchers.equalTo((LocalDate.now().toString()))));
     }
 
+    @Test
+    public void findUserByIdTest() throws Exception{
+        Mockito.when(userService.findById(Mockito.anyInt())).then(objUser->{
+            user.setId(1);
+            return user;
+        });
 
+        ObjectMapper mapper = new ObjectMapper();
+        String userJson = mapper.writeValueAsString(user);
 
+        mockMvc.perform(MockMvcRequestBuilders.get("/usuario/1")
+                .contentType(MediaType.APPLICATION_JSON).content(userJson))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.equalTo(1)));
+    }
+
+    @Test
+    public void findUserByIdWhenNoUserTest() throws Exception{
+        Mockito.when(userService.findById(Mockito.anyInt())).then(objUser->{
+            throw new RuntimeException("usuario nao existe");
+        });
+
+        ObjectMapper mapper = new ObjectMapper();
+        String userJson = mapper.writeValueAsString(user);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/usuario/1")
+                .contentType(MediaType.APPLICATION_JSON).content(userJson))
+                .andExpect(MockMvcResultMatchers.status().is(400));
+    }
 }
 
 
