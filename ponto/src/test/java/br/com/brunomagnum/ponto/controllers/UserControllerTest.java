@@ -118,6 +118,39 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON).content(userJson))
                 .andExpect(MockMvcResultMatchers.status().is(400));
     }
+
+    @Test
+    public void updateUserTest() throws Exception {
+        Mockito.when(userService.update(Mockito.anyInt(),Mockito.any(User.class))).then(objUser ->{
+            user.setId(1);
+            user.setDate(LocalDate.now());
+            return user;
+        });
+
+        ObjectMapper mapper = new ObjectMapper();
+        String userJson = mapper.writeValueAsString(user);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/usuario/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userJson))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.id", CoreMatchers.equalTo(1)))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.date", CoreMatchers.equalTo((LocalDate.now().toString()))));
+    }
+
+    @Test
+    public void updateUserTestWhenNoUser() throws Exception {
+        Mockito.when(userService.update(Mockito.anyInt(),Mockito.any(User.class))).then(objUser ->{
+            throw new RuntimeException("usuario nao existe");
+        });
+
+        ObjectMapper mapper = new ObjectMapper();
+        String userJson = mapper.writeValueAsString(user);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/usuario/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(userJson))
+                .andExpect(MockMvcResultMatchers.status().is(400));
+    }
 }
 
 
