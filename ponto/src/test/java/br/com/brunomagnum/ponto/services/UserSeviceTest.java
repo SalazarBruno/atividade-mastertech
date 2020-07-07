@@ -6,6 +6,7 @@ import br.com.brunomagnum.ponto.repositories.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +70,16 @@ public class UserSeviceTest {
         Mockito.when(userRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(user));
 
         Assertions.assertEquals(user,userService.update(1,user));
+    }
+
+    @Test
+    public void updateUserWhenNoUserTest(){
+        Mockito.when(userRepository.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+
+        Assertions.assertThrows(RuntimeException.class, () -> {
+            userService.update(1,user);
+        });
+//        Assertions.assertThrows(RuntimeException.class, (Executable) userService.update(1,user));
     }
 
 }
