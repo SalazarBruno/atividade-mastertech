@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Optional;
 
 @SpringBootTest
 public class UserSeviceTest {
@@ -35,7 +36,7 @@ public class UserSeviceTest {
     }
 
     @Test
-    public void testfindAllUsers() throws Exception {
+    public void findAllUsersTest() throws Exception {
 
         Mockito.when(userRepository.findAll()).thenReturn(Arrays.asList(user));
         Iterable<User> listOfUsers = userService.findAll();
@@ -43,18 +44,31 @@ public class UserSeviceTest {
         Assertions.assertEquals(listOfUsers,Arrays.asList(user));
     }
 
-/*
+
     @Test
-    public void testfindAllUsersWhenNoUsers() {
+    public void findAllUsersWhenNoUsersTest() {
 
         Mockito.when(userRepository.findAll()).then(objUser -> {
             throw new Exception();
         });
 
 
-        Assertions.assertThrows(Exception.class,);
+        Assertions.assertThrows(Exception.class, userService::findAll);
     }
-*/
 
+    @Test
+    public void createUserTest(){
+        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
+
+        Assertions.assertEquals(user,userService.create(user));
+    }
+
+    @Test
+    public void updateUserTest (){
+        Mockito.when(userRepository.save(Mockito.any(User.class))).thenReturn(user);
+        Mockito.when(userRepository.findById(Mockito.anyInt())).thenReturn(Optional.of(user));
+
+        Assertions.assertEquals(user,userService.update(1,user));
+    }
 
 }

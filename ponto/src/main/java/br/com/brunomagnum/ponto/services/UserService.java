@@ -19,6 +19,7 @@ public class UserService {
   private UserRepository userRepository;
 
   public User create(@Valid User user) {
+
     return userRepository.save(user);
   }
 
@@ -40,7 +41,7 @@ public class UserService {
     }
   }
 
-  public User update(int id, @Valid User newUser) throws Exception {
+  public User update(int id, User newUser) {
     Optional<User> optionalUser = userRepository.findById(id);
     if (optionalUser.isPresent()) {
       User user = optionalUser.get();
@@ -49,7 +50,7 @@ public class UserService {
       user.setCpf(newUser.getCpf());
       return userRepository.save(user);
     } else {
-      throw new Exception("Usuário não encontrado");
+      throw new RuntimeException("Usuário não encontrado");
     }
   }
 }
