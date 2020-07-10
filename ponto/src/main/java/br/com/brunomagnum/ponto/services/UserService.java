@@ -32,12 +32,12 @@ public class UserService {
 
   }
 
-  public User findById(Integer id) throws Exception {
+  public User findById(Integer id) throws RuntimeException {
     Optional<User> optionalUser = userRepository.findById(id);
     if (optionalUser.isPresent()) {
       return optionalUser.get();
     } else {
-      throw new Exception("Usuário não encontrado");
+      throw new RuntimeException("Usuário não encontrado");
     }
   }
 

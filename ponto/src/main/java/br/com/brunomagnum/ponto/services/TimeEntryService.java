@@ -22,16 +22,22 @@ public class TimeEntryService {
     TimeEntryRepository timeEntryRepository;
 
     @Autowired
-    UserRepository userRepository;
+    UserService userService;
 
-    public TimeEntry register(TimeEntry timeEntry) {
+    public TimeEntry register(TimeEntry timeEntry) throws RuntimeException {
         LocalDateTime punchTime = LocalDateTime.now();
 
-        timeEntry.setUser(timeEntry.getUser());
-        timeEntry.setPunch(punchTime);
-        timeEntry.setEntryType(timeEntry.getEntryType());
+        Optional<User> optionalUser = Optional.ofNullable(userService.findById(timeEntry.getUser().getId()));
+        if (optionalUser.isPresent()) {
 
-        return timeEntryRepository.save(timeEntry);
+            timeEntry.setUser(timeEntry.getUser());
+            timeEntry.setPunch(punchTime);
+            timeEntry.setEntryType(timeEntry.getEntryType());
+
+            return timeEntryRepository.save(timeEntry);
+        } else{
+            throw new RuntimeException("O usuário informado não existe");
+        }
     }
 
 }

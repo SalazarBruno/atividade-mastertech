@@ -4,6 +4,7 @@ import br.com.brunomagnum.ponto.enums.EntryType;
 import br.com.brunomagnum.ponto.models.TimeEntry;
 import br.com.brunomagnum.ponto.models.User;
 import br.com.brunomagnum.ponto.repositories.TimeEntryRepository;
+import br.com.brunomagnum.ponto.repositories.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @SpringBootTest
 public class TimeEntryServiceTest {
@@ -21,7 +23,7 @@ public class TimeEntryServiceTest {
     @Autowired
     TimeEntryService timeEntryService;
 
-    @Autowired
+    @MockBean
     UserService userService;
 
     @MockBean
@@ -56,10 +58,18 @@ public class TimeEntryServiceTest {
         testTimeEntry.setEntryType(EntryType.SAIDA);
         testTimeEntry.setUser(user);
 
-        //Mockito.when(timeEntryService.)
+        Mockito.when(userService.findById(Mockito.anyInt())).thenReturn(user);
         Mockito.when(timeEntryRepository.save(Mockito.any(TimeEntry.class))).thenReturn(testTimeEntry);
 
         Assertions.assertEquals(testTimeEntry, timeEntryService.register(timeEntry));
+    }
+
+    @Test
+    public void registerTimeEntryWhenUserDoesntExistsTest(){
+
+        Mockito.when(userService.findById(Mockito.anyInt())).thenReturn(null);
+
+        Assertions.assertThrows(RuntimeException.class,() -> {timeEntryService.register(timeEntry);});
     }
 
 }
